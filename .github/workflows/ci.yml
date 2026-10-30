@@ -1,0 +1,34 @@
+name: Azurebill CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxis JavaScript
+        run: |
+          node --check movil/app.js
+          node --check movil/restablecer.js
+          node --check movil/sw.js
+      - name: Ejecutar pruebas unitarias
+        run: npm test
+      - name: Empaquetar sitio web
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          with ZipFile('Azurebill-web-v1.0.0.zip','w',ZIP_DEFLATED) as z:
+              for p in Path('movil').rglob('*'):
+                  if p.is_file(): z.write(p,p.relative_to('movil'))
+          PYTHON
+      - name: Publicar artefacto descargable del workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: Azurebill-web-v1.0.0
+          path: Azurebill-web-v1.0.0.zip
