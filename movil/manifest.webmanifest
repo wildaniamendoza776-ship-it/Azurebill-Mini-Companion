@@ -1,0 +1,21 @@
+{
+ "name": "Azurebill Mini Companion",
+ "short_name": "Azurebill",
+ "start_url": "./index.html",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#1b1033",
+ "theme_color": "#1b1033",
+ "icons": [
+  {
+   "src": "assets/icono.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  }
+ ],
+ "id": "./",
+ "lang": "es",
+ "scope": "./",
+ "description": "Tu compañera para cuidar tu tiempo en pantalla"
+}

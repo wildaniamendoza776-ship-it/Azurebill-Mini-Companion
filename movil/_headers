@@ -1,0 +1,14 @@
+# Cabeceras de seguridad para Cloudflare Pages / Netlify (NO sirve en Bluehost: allí se usa .htaccess).
+# connect-src permite SOLO tu proyecto de Supabase. Si cambias de proyecto, actualiza esa dirección.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://duptiyjinjfiuuqtaery.supabase.co; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+/sw.js
+  Cache-Control: no-cache
+
+/config.js
+  Cache-Control: no-cache

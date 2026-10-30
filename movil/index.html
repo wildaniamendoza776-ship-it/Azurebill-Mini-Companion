@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b1033"><link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icono.png"><title>Azurebill</title>
+<style>
+:root{--bg:#1b1033;--card:#2a1a4e;--ac:#b388ff;--tx:#f4eeff;--wa:#fdcb6e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;overflow:hidden;touch-action:manipulation}
+#escena{position:fixed;inset:0;background:center/cover no-repeat;image-rendering:pixelated}
+#escena:after{content:"";position:absolute;inset:0;background:linear-gradient(#0006,#0000 30%,#0000 55%,#000a);transition:background .6s}
+body.noche #escena:after{background:linear-gradient(#000a,#0008 40%,#000b)}
+.pantalla{position:fixed;inset:0;display:none;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.pantalla.on{display:flex}
+.pwrow{display:flex;gap:6px;width:min(320px,100%)}.pwrow input{flex:1;min-width:0;width:auto}.pwrow button{width:56px;min-height:0;font-size:20px;padding:0}
+button.lk{background:none;border:0;box-shadow:none;color:var(--ac);text-decoration:underline;font-size:15px;min-height:0;padding:8px}
+#login,#recup{align-items:center;justify-content:center;gap:12px;padding:24px;background:#1b1033cc;overflow-y:auto}
+input, #langLogin{width:min(320px,100%);font-size:18px;padding:14px;border-radius:14px;border:2px solid var(--ac);background:#0004;color:var(--tx)}
+button{font:inherit;color:var(--tx);border:0;border-radius:16px;background:var(--card);padding:12px;min-height:48px}
+.gr{background:var(--ac);color:#1b1033;font-weight:700;width:min(320px,100%);font-size:18px}
+#top{position:relative;display:flex;gap:10px;align-items:center;padding:10px 14px;font-weight:700}
+#xpbar{flex:0 0 clamp(70px,28vw,120px);height:10px;border-radius:9px;background:#0006;overflow:hidden}#mo{margin-left:auto}#xpbar i{display:block;height:100%;background:var(--ac)}
+#centro{position:relative;flex:1;display:flex;align-items:flex-end;justify-content:center}
+:root{--azu:min(132vw,66vh,720px)}body.lluvia{--azu:min(112vw,62vh,640px)}
+#azu{flex:none;width:var(--azu);height:var(--azu);max-width:none;image-rendering:pixelated;cursor:pointer;margin-bottom:calc(var(--azu)*-.08)}
+#chip{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#000a;border-radius:20px;padding:6px 14px;display:none;white-space:nowrap}
+#zzz{position:absolute;top:14%;right:18%;font-size:34px;display:none;animation:fl 2.4s infinite}body.noche #zzz{display:block}
+@keyframes fl{50%{transform:translateY(-10px);opacity:.5}}
+#stats{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px 8px;font-size:13px}
+.b{height:9px;border-radius:9px;background:#0006;overflow:hidden;margin-top:3px}.b i{display:block;height:100%}
+#dock{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:2px;padding:8px 4px 12px;background:#000a}
+#dock button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;padding:8px 0;min-width:0;background:transparent}#dock span{font-size:24px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px;z-index:30;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.t{pointer-events:auto;background:#2a1a4eee;border-left:5px solid var(--ac);border-radius:14px;padding:12px 14px;box-shadow:0 4px 18px #0008;animation:in .25s}
+.t.al{border-left-color:var(--wa);background:#2d3436f2}.t.al b{color:var(--wa);display:block;margin-bottom:4px}.t.al small{display:block;opacity:.6;margin-top:6px}
+@keyframes in{from{transform:translateY(-20px);opacity:0}}
+#vel{position:fixed;inset:0;background:#000a;z-index:20;display:none}
+#hoja{position:fixed;left:0;right:0;bottom:0;max-height:82vh;z-index:21;background:var(--card);border-radius:24px 24px 0 0;padding:6px 14px calc(env(safe-area-inset-bottom) + 16px);transform:translateY(105%);transition:transform .25s;overflow-y:auto;overscroll-behavior:contain}
+#hoja.on{transform:none}
+#agarre{width:60px;height:6px;border-radius:6px;background:#fff5;margin:8px auto}
+#cerrar{position:absolute;right:10px;top:10px;width:48px;font-size:22px;background:#0004}
+h3{margin:10px 56px 12px 4px}
+.rej{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.it{background:#0004;border-radius:16px;padding:8px;text-align:center;font-size:12px;position:relative}.it img{width:100%;height:68px;object-fit:contain}
+.it em{position:absolute;right:6px;top:4px;font-style:normal;background:var(--ac);color:#1b1033;border-radius:10px;padding:0 7px;font-weight:700}
+.esc{height:84px;background:center/cover;border-radius:16px;margin-bottom:10px;display:flex;align-items:flex-end;padding:8px;font-weight:700;text-shadow:0 1px 4px #000;width:100%;color:#fff}
+.mini{font-size:12px;opacity:.75;text-align:center;margin:6px 0 0}
+.dat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.dat div{background:#0004;border-radius:14px;padding:10px;font-size:14px}.dat b{display:block;font-size:20px}
+.fila{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0}.fila input{width:96px;padding:10px;font-size:17px;text-align:center}
+.bio{background:#0004;border-radius:14px;padding:12px;font-size:14px;line-height:1.45;margin:12px 0;white-space:pre-line}
+@media(orientation:landscape) and (max-height:480px){#hoja{max-height:94vh}:root{--azu:min(70vh,55vw)}body.lluvia{--azu:min(66vh,52vw)}#stats{font-size:11px}}
+.ani{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}.ani button{padding:8px 0;font-size:12px}.ani span{display:block;font-size:26px}.ani .sel{background:var(--ac);color:#1b1033}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cal i{font-style:normal;font-size:12px;color:var(--ac)}
+.dd{min-height:46px;padding:2px;font-size:13px;border:2px solid transparent;border-radius:10px;background:#0004}.dd small{display:block;font-size:11px}.dd.hoy{border-color:var(--wa)}.dd.sel{border-color:#fff}
+.nt{background:#0004;border-radius:10px;padding:8px 10px;margin:6px 0;font-size:14px;white-space:pre-line}
+.logro{background:#0004;border-radius:14px;padding:12px;margin:9px 0}.logro p{font-size:13px;opacity:.85;margin:6px 0}.logro small{display:block;text-align:right;margin-top:4px;opacity:.8}
+#langLogin{font-size:17px;padding:12px;border:2px solid var(--ac);border-radius:12px;background:var(--card);color:var(--tx)}
+#dock button{font-size:0!important}#dock button span{font-size:clamp(20px,6.4vw,26px)!important}
+</style></head><body>
+<div id="escena"></div>
+<div id="login" class="pantalla on">
+ <img src="assets/assets-azurebill/azu-saluda.gif" height="150" style="image-rendering:pixelated" alt="">
+ <h2 style="margin:0">Azurebill</h2>
+ <p class="mini" style="margin:0;max-width:300px">Tu compañera para cuidar tu tiempo en pantalla 💜</p>
+ <label id="langLabel" for="langLogin">🌐 Idioma / Language / 语言</label><select id="langLogin" aria-label="Language"><option value="es">🇪🇸 Español</option><option value="en">🇬🇧 English</option><option value="zh">🇨🇳 中文</option></select>
+ <input id="authName" placeholder="Nombre de usuario" maxlength="50" autocomplete="nickname" hidden>
+ <input id="u" placeholder="Correo electrónico" type="email" autocomplete="email" autocapitalize="none" inputmode="email">
+ <div class="pwrow"><input id="p" type="password" placeholder="Contraseña" autocomplete="current-password"><button id="bEye" type="button" aria-label="Mostrar u ocultar contraseña">👁</button></div>
+ <p class="mini" id="pwHint" style="margin:0;max-width:320px" hidden></p>
+ <button class="gr" id="bEntrar">Entrar</button>
+ <button id="bReg" style="width:min(320px,100%)">Crear cuenta</button>
+ <button id="bReset" style="width:min(320px,100%)">¿Olvidaste tu contraseña?</button>
+ <button id="bOld" style="width:min(320px,100%)" hidden></button>
+ <button id="bResend" style="width:min(320px,100%)" hidden></button>
+ <button id="bLink" style="width:min(320px,100%)" hidden>Vincular cuenta antigua</button><button id="bNew" style="width:min(320px,100%)" hidden>Crear perfil nuevo</button>
+ <p class="mini" id="authStatus" style="max-width:320px"></p>
+ <p class="mini" id="modo" hidden></p>
+ <p class="mini" style="margin:0"><a id="lnkPriv" href="privacidad.html" target="_blank" rel="noopener" style="color:var(--ac)">Política de privacidad</a></p>
+ <details id="cloudSetup" style="width:min(320px,100%)"><summary class="mini">⚙️ Conexión a la nube</summary>
+  <input id="cu" placeholder="Project URL (https://xxxx.supabase.co)" style="margin-top:8px">
+  <input id="ck" placeholder="Clave anon / publishable" style="margin-top:8px">
+  <button class="gr" id="bCfg" style="margin-top:8px">Guardar conexión</button>
+  <button id="bCfgBorrar" style="width:100%;margin-top:6px">Usar modo local</button></details>
+</div>
+<div id="recup" class="pantalla" style="align-items:center;justify-content:center;gap:12px;padding:24px;background:#1b1033cc;overflow-y:auto">
+ <img src="assets/assets-azurebill/azu-saluda.gif" height="120" style="image-rendering:pixelated" alt="">
+ <h2 id="recTitulo" style="margin:0">Crea tu nueva contraseña</h2>
+ <p class="mini" id="recInfo" style="margin:0;max-width:300px"></p>
+ <input id="np1" type="password" autocomplete="new-password" minlength="8">
+ <input id="np2" type="password" autocomplete="new-password" minlength="8">
+ <button class="gr" id="bNp">Guardar contraseña</button><p class="mini" id="recSta" style="max-width:320px"></p>
+</div>
+<div id="juego" class="pantalla">
+ <div id="top"><span id="nv"></span><div id="xpbar"><i></i></div><span id="mo"></span></div>
+ <div id="centro"><div id="chip"></div><span id="zzz">💤</span><img id="azu" alt="Azurebill"></div>
+ <div id="stats"><div>🍽️ Hambre<div class="b"><i id="sh" style="background:#ffb86b"></i></div></div><div>💜 Felicidad<div class="b"><i id="sf" style="background:#ff7ad9"></i></div></div><div>⚡ Energía<div class="b"><i id="se" style="background:#6ee7ff"></i></div></div></div>
+ <div id="dock">
+  <button data-a="mochila"><span>🎒</span></button><button data-a="alimentar"><span>🍎</span></button>
+  <button data-a="gacha"><span>📦</span></button><button data-a="estudiar"><span>⛏️</span></button>
+  <button data-a="escenas"><span>🖼️</span></button><button data-a="diario"><span>📖</span></button><button data-a="perfil"><span>👤</span></button><button data-a="logros"><span>🏆</span></button>
+ </div>
+</div>
+<div id="toasts"></div><div id="vel"></div>
+<div id="hoja"><div id="agarre"></div><button id="cerrar" aria-label="Cerrar">✕</button><div id="hc"></div></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body></html>
